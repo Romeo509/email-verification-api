@@ -3,7 +3,11 @@ from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash
 import random
 import string
-import os  # Import the os module
+import os
+from dotenv import load_dotenv 
+
+""" Load environtment variable from the .env file"""
+load_dotenv()
 
 app = Flask(__name__, static_url_path='')
 
@@ -11,8 +15,8 @@ app = Flask(__name__, static_url_path='')
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = "romeoameku503@gmail.com"
-app.config["MAIL_PASSWORD"] = "qavsnraqvfydeoam"
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME") 
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD") 
 mail = Mail(app)
 
 """Stores user data In-memory database"""
@@ -105,4 +109,4 @@ def verify_email():
         return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))  # Updated to use the correct port
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
