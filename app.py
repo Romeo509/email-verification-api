@@ -3,6 +3,7 @@ from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash
 import random
 import string
+import os  # Import the os module
 
 app = Flask(__name__, static_url_path='')
 
@@ -18,7 +19,7 @@ mail = Mail(app)
 users = {}
 verification_codes = {}
 
-""" Hundles function to generate a random verification code """
+"""Handles function to generate a random verification code"""
 def generate_verification_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
@@ -104,4 +105,4 @@ def verify_email():
         return jsonify({"error": "Unexpected error occurred", "details": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))  # Updated to use the correct port
